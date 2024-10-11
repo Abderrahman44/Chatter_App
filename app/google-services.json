@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "668923738726",
+    "project_id": "chatting-ff84b",
+    "storage_bucket": "chatting-ff84b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668923738726:android:4fec114b0f85d728dc0ba7",
+        "android_client_info": {
+          "package_name": "com.example.chatter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEKxVkRTbXaAFVkyHw1Y_eGV3SYsltKG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

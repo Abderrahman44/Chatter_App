@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ChatterTheme {
-
+                MainApp()
             }
         }
     }

@@ -96,7 +96,7 @@ fun SignUpScreen(navController: NavController) {
             ) {
                 Text(text = "Sign Un")
             }
-            TextButton(onClick = { /*TODO*/ }) {
+            TextButton(onClick = { navController.popBackStack() }) {
                 Text(text = "Already have account? Sign In")
             }
 

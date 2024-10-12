@@ -20,17 +20,17 @@ import androidx.compose.material3.IconButton
 
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -40,11 +40,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.chatter.R
+import java.lang.Error
 import androidx.compose.material3.Text as Text
 
 
 @Composable
 fun SignInScreen(navController: NavController) {
+    var email = remember {
+        mutableStateOf("")
+    }
+    var password = remember {
+        mutableStateOf("")
+    }
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -63,12 +70,19 @@ fun SignInScreen(navController: NavController) {
                     .background(Color.White)
             )
 
-            EmailField()
-            ShowHidePasswordTextField()
+            SimpleField("Enter Email", email)
+            Spacer(modifier = Modifier.size(6.dp))
+            ShowHidePasswordTextField("Enter Password", password)
 
             Spacer(modifier = Modifier.size(16.dp))
-            Button(onClick = { /*TODO*/ }) {
+            Button(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(text = "Sign in")
+            }
+            TextButton(onClick = { navController.navigate("signup") }) {
+                Text(text = "Don't have account? Sign up")
             }
 
         }
@@ -77,32 +91,36 @@ fun SignInScreen(navController: NavController) {
 }
 
 
-
-
 @Composable
-private fun EmailField() {
+fun SimpleField(message: String, content: MutableState<String>, isError: Boolean = false) {
 
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
-        onValueChange = {},
-        value = "",
-        //state = rememberTextFieldState(email),
-        placeholder = { Text(text ="Enter email" )}
+        value = content.value,
+        onValueChange = { content.value = it },
+        placeholder = { Text(text = message) },
+        isError = isError
+
     )
 }
-@Composable
-fun ShowHidePasswordTextField() {
 
-   // var password by remember { mutableStateOf(value = "") }
+@Composable
+fun ShowHidePasswordTextField(
+    message: String, password: MutableState<String>, isError: Boolean = false
+) {
+
+    // var password by remember { mutableStateOf(value = "") }
     var showPassword by remember { mutableStateOf(value = false) }
 
     OutlinedTextField(
         modifier = Modifier
             .fillMaxWidth(),
-        value = "",
+        value = password.value,
         onValueChange = {
+            password.value = it
         },
-        placeholder = { Text(text = "Type password here") },
+        isError = isError,
+        placeholder = { Text(text = message) },
         visualTransformation = if (showPassword) {
 
             VisualTransformation.None

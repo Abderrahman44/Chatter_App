@@ -81,6 +81,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
 
     implementation(libs.androidx.material.icons.core)
+    implementation("androidx.compose.material:material-icons-extended")
 
 }
 kapt {

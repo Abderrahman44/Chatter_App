@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,16 +32,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.chatter.R
+import com.example.chatter.feature.auth.AuthState
+import com.example.chatter.feature.auth.AuthViewModel
+
 
 @Composable
-fun SignInScreen(navController: NavController) {
+fun SignInScreen(navController: NavController,authViewModel: AuthViewModel) {
 
-    //  val viewModel: SignInViewModel = hiltViewModel()
-    //   val uiState = viewModel.state.collectAsState()
+
     var email by remember {
         mutableStateOf("")
     }
@@ -48,21 +50,18 @@ fun SignInScreen(navController: NavController) {
         mutableStateOf("")
     }
 
-//    val context = LocalContext.current
-//    LaunchedEffect(key1 = uiState.value) {
-//
-//        when (uiState.value) {
-//            is SignInState.Success -> {
-//                navController.navigate("home")
-//            }
-//
-//            is SignInState.Error -> {
-//                Toast.makeText(context, "Sign In failed", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            else -> {}
-//        }
-//    }
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = authState.value) {
+        when(authState.value){
+            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Error -> Toast.makeText(context,
+                (authState.value as AuthState.Error ).message,
+                Toast.LENGTH_SHORT).show()
+            else -> Unit
+        }
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -93,16 +92,12 @@ fun SignInScreen(navController: NavController) {
                 visualTransformation = PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.size(16.dp))
-//
-//            if (uiState.value == SignInState.Loading) {
-//                CircularProgressIndicator()
-//            } else {
+
                 Button(
-                    onClick = { //viewModel.signIn(email, password)
+                    onClick = { authViewModel.login(email,password)
                              },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = email.isNotEmpty() && password.isNotEmpty()
-                            //&& (uiState.value == SignInState.Nothing || uiState.value == SignInState.Error)
                 ) {
                     Text(text = "Sign In")
                 }
@@ -110,7 +105,6 @@ fun SignInScreen(navController: NavController) {
                 TextButton(onClick = { navController.navigate("signup") }) {
                     Text(text = "Don't have an account? Sign Up")
                 }
-           // }
         }
     }
 }
@@ -118,5 +112,5 @@ fun SignInScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewSignInScreen() {
-    SignInScreen(navController = rememberNavController())
+  //  SignInScreen(navController = rememberNavController())
 }

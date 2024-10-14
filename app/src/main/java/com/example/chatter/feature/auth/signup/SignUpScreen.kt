@@ -1,6 +1,7 @@
 package com.example.chatter.feature.auth.signup
 
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +17,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,10 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.chatter.R
+import com.example.chatter.feature.auth.AuthState
+import com.example.chatter.feature.auth.AuthViewModel
 
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController,authViewModel: AuthViewModel) {
 
     var name by remember {
         mutableStateOf("")
@@ -44,9 +50,22 @@ fun SignUpScreen(navController: NavController) {
     var password by remember {
         mutableStateOf("")
     }
-    var confirm by remember {
-        mutableStateOf("")
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = authState.value) {
+        when(authState.value) {
+            is AuthState.Authenticated -> navController.navigate("home")
+            is AuthState.Error -> Toast.makeText(
+                context,
+                (authState.value as AuthState.Error).message,
+                Toast.LENGTH_SHORT
+            ).show()
+            else -> Unit
+        }
+
     }
+
 
 
     Scaffold(modifier = Modifier.fillMaxSize()) {
@@ -80,20 +99,14 @@ fun SignUpScreen(navController: NavController) {
                 label = { Text(text = "Password") },
                 visualTransformation = PasswordVisualTransformation()
             )
-            OutlinedTextField(
-                value = confirm, onValueChange = { confirm = it },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Confirm Password") },
-                visualTransformation = PasswordVisualTransformation(),
-                isError = password.isNotEmpty() && confirm.isNotEmpty() && password != confirm
-            )
+
             Spacer(modifier = Modifier.size(16.dp))
 
                 Button(
                     onClick = {
-
+                        authViewModel.signUp(email, password)
                     }, modifier = Modifier.fillMaxWidth(),
-                    enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirm.isNotEmpty() && password == confirm
+                    enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
                 ) {
                     Text(text = "Sign Up")
                 }
@@ -109,5 +122,5 @@ fun SignUpScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewSignInScreen() {
-    SignUpScreen(navController = rememberNavController())
+ //   SignUpScreen(navController = rememberNavController())
 }

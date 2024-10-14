@@ -82,6 +82,7 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
 
     implementation(libs.androidx.material.icons.core)
+    implementation(libs.androidx.runtime.livedata)
 }
 kapt {
     correctErrorTypes = true

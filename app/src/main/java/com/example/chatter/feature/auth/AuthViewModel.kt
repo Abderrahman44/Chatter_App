@@ -3,11 +3,15 @@ package com.example.chatter.feature.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.chatter.feature.auth.AuthState.Unauthenticated
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AuthViewModel: ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor() : ViewModel() {
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
-    private val _authState = MutableLiveData<AuthState>()
+    private val _authState = MutableLiveData<AuthState>(Unauthenticated)
     val authState :LiveData<AuthState> = _authState
 
     init {
@@ -16,7 +20,7 @@ class AuthViewModel: ViewModel() {
 
     private fun checkAuthStatus(){
         if (auth.currentUser == null){
-            _authState.value = AuthState.Unauthenticated
+            _authState.value = Unauthenticated
         } else {
             _authState.value = AuthState.Authenticated
         }
@@ -28,18 +32,20 @@ class AuthViewModel: ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
+                    return@addOnCompleteListener
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message?: "Login Failed")
 
                 }
             }
     }
-    fun signUp(email: String,pass: String){
+    fun signUp(name:String,email: String,pass: String){
         _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email,pass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
+                    return@addOnCompleteListener
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"sign up failed")
                 }
@@ -47,7 +53,7 @@ class AuthViewModel: ViewModel() {
     }
     fun signOut(){
         auth.signOut()
-        _authState.value = AuthState.Unauthenticated
+        _authState.value = Unauthenticated
     }
 }
 

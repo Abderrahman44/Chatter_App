@@ -104,7 +104,7 @@ fun SignUpScreen(navController: NavController,authViewModel: AuthViewModel) {
 
                 Button(
                     onClick = {
-                        authViewModel.signUp(email, password)
+                        authViewModel.signUp(name,email, password)
                     }, modifier = Modifier.fillMaxWidth(),
                     enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()
                 ) {

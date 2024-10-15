@@ -29,6 +29,9 @@ fun MainApp(modifier: Modifier = Modifier,authViewModel: AuthViewModel) {
             composable("home") {
                 HomeScreen(navController,authViewModel)
             }
+            composable("chat/{channelId}") {
+
+            }
         } )
     }
 }

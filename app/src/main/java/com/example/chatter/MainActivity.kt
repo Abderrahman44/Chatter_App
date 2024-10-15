@@ -15,7 +15,7 @@ import com.example.chatter.feature.auth.AuthViewModel
 import com.example.chatter.ui.theme.ChatterTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

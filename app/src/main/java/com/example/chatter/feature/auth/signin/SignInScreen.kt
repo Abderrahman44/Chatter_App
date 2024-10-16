@@ -41,8 +41,6 @@ import com.example.chatter.feature.auth.AuthViewModel
 
 @Composable
 fun SignInScreen(navController: NavController,authViewModel: AuthViewModel) {
-
-
     var email by remember {
         mutableStateOf("")
     }

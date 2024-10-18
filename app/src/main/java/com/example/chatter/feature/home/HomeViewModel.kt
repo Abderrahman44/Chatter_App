@@ -4,10 +4,15 @@ import androidx.lifecycle.ViewModel
 import com.example.chatter.model.Channel
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 @HiltViewModel
@@ -39,3 +44,16 @@ class HomeViewModel @Inject constructor() : ViewModel() {
             }
     }
 }
+
+//@Module
+//@InstallIn(SingletonComponent::class)
+//object module{
+//
+//    @Provides
+//    @Singleton
+//    fun getDao(
+//
+//    ):String{
+//        return ""
+//    }
+//}

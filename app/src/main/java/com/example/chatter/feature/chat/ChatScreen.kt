@@ -1,5 +1,6 @@
 package com.example.chatter.feature.chat
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,13 +42,22 @@ import com.google.firebase.auth.auth
 fun ChatScreen(
     navController: NavController, channelId: String
 ) {
-    Scaffold {
+    Scaffold(
+        contentColor = Color.Black
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
             val viewModel: ChatViewModel = hiltViewModel()
+            val chooserDialog = remember {
+                mutableStateOf(false)
+            }
+            val  cameraImageUri = remember {
+                mutableStateOf<Uri?>(null)
+            }
+
             LaunchedEffect(key1 = true) {
                 viewModel.listenForMessages(channelId)
             }
@@ -74,6 +84,7 @@ fun ChatMessages(
     }
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
+
             items(messages) { message ->
                 ChatBubble(message)
 
@@ -83,8 +94,7 @@ fun ChatMessages(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(8.dp)
-                .background(Color.LightGray),
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(

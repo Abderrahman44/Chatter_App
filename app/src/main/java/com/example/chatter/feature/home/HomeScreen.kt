@@ -83,7 +83,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
             }
         }, contentColor = Color.Black
     ) {
-        Column {
+
             Box(
                 modifier = Modifier
                     .padding(it)
@@ -102,7 +102,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                     }
 
 
-                    item() {
+                    item {
                         val onActiveSearch = remember {
                             mutableStateOf(false)
                         }
@@ -145,16 +145,16 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                     }
                 }
 
-            }
-            Column {
-                TextButton(onClick = {
-                    authViewModel.signOut()
-                    navController.navigate("login")
-                }) {
-                    Text(text = "Sign out")
-                }
-
-            }
+             // Sign out txt button
+//            Column {
+//                TextButton(onClick = {
+//                    authViewModel.signOut()
+//                    navController.navigate("login")
+//                }) {
+//                    Text(text = "Sign out")
+//                }
+//
+//            }
 
         }
     }
@@ -211,7 +211,8 @@ fun ChannelItem(
             }
 
 
-            Text(text = channelName, modifier = Modifier.padding(8.dp), color = MaterialTheme.colorScheme.inversePrimary)
+            Text(text = channelName, modifier = Modifier.padding(8.dp),
+                color = MaterialTheme.colorScheme.inversePrimary)
         }
 //        if (shouldShowCallButtons) {
 //            Row(

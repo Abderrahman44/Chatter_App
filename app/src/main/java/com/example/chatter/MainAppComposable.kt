@@ -14,37 +14,48 @@ import com.example.chatter.feature.auth.signin.SignInScreen
 import com.example.chatter.feature.auth.signup.SignUpScreen
 import com.example.chatter.feature.chat.ChatScreen
 import com.example.chatter.feature.home.HomeScreen
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun MainApp(modifier: Modifier = Modifier,authViewModel: AuthViewModel) {
+fun MainApp(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
     Surface(modifier = Modifier.fillMaxSize()) {
         val navController = rememberNavController()
 
-        NavHost(navController = navController,"login", builder = {
+        NavHost(navController = navController, "login", builder = {
 
-            composable(paths.login.name) {
-                SignInScreen(navController,authViewModel)
+            composable(Pathes.login.name) {
+                SignInScreen(navController, authViewModel)
             }
             composable("signup") {
-                SignUpScreen(navController,authViewModel)
+                SignUpScreen(navController, authViewModel)
             }
             composable("home") {
-                HomeScreen(navController,authViewModel)
+                HomeScreen(navController, authViewModel)
             }
-            composable("chat/{channelId}", arguments = listOf(
-                navArgument("channelId"){
-                    type = NavType.StringType
-                }
-            )) {
-                val channelId = it.arguments?.getString("channelId")?:""
-                ChatScreen(navController = navController, channelId =channelId )
+            composable(
+                "chat/{channelId}&{channelName}",
+                arguments = listOf(
+                    navArgument("channelId") {
+                        type = NavType.StringType
+                    },
+                    navArgument("channelName") {
+                        type = NavType.StringType
+                    }
+                ))
+            {
+
+                val channelId = it.arguments?.getString("channelId") ?: ""
+                val channelName = it.arguments?.getString("channelName") ?: ""
+                ChatScreen(
+                    navController = navController,
+                    channelId = channelId,
+                    channelName = channelName
+                )
             }
-        } )
+        })
     }
 }
 
-enum class paths{
+enum class Pathes {
     login,
 
 }

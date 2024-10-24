@@ -2,6 +2,8 @@ package com.example.chatter.feature.chat
 
 import android.content.Context
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -48,7 +50,6 @@ class ChatViewModel @Inject constructor(
                 task.exception?.let {
                     throw it
                 }
-
             }
             imageRef.downloadUrl
         }.addOnCompleteListener { task ->
@@ -61,7 +62,6 @@ class ChatViewModel @Inject constructor(
                 )
             }
         }
-
 
     }
 

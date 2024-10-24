@@ -24,7 +24,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +38,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -50,9 +50,7 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-
 import com.example.chatter.R
-import com.example.chatter.feature.home.ChannelItem
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import java.io.File
@@ -63,40 +61,44 @@ import java.util.Locale
 
 @Composable
 fun ChatScreen(
-    navController: NavController, channelId: String,
+    navController: NavController,
+    channelId: String,
     channelName: String
 ) {
+
     Scaffold(
         containerColor = Color.Black
-    ) { it ->
+    ) {
         val viewModel: ChatViewModel = hiltViewModel()
         val chooserDialog = remember {
             mutableStateOf(false)
         }
-        val cameraImageUri = remember {
-            mutableStateOf<Uri?>(null)
-        }
 
-        val cameraImageLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.TakePicture(),
-        ) { success ->
-            if (success) {
-                cameraImageUri.value?.let { img ->
-                    //send Image to server
-                    viewModel.sendImageMessage(img, channelId)
+        val cameraImageUri =
+            remember { mutableStateOf<Uri?>(null) }
+
+
+        val cameraImageLauncher =
+            rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.TakePicture(),
+            ) { success ->
+                if (success) {
+                    cameraImageUri.value?.let { img ->
+                        //send Image to server
+                        viewModel.sendImageMessage(img, channelId)
+                    }
+
                 }
-
             }
-        }
-        val imageLauncher = rememberLauncherForActivityResult(
+
+        val imageLauncher =
+            rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) { uri: Uri? ->
-            uri?.let {
-                viewModel.sendImageMessage(it, channelId)
+            uri?.let { img ->
+                viewModel.sendImageMessage(img, channelId)
             }
         }
-
-
         fun createImageUri(): Uri {
             val timeStamp =
                 SimpleDateFormat("yyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -121,23 +123,26 @@ fun ChatScreen(
             }
         }
         if (chooserDialog.value) {
-            ContentSelectionDialog(onCameraSelected = {
-                chooserDialog.value = false
-                if (navController.context.checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    cameraImageLauncher.launch(createImageUri())
-                } else {
-                    //request permission
-                    permissionLauncher.launch(android.Manifest.permission.CAMERA)
-                }
-            }, onGallerySelected = {
-                chooserDialog.value = false
-                imageLauncher.launch("image/*")
-            })
+
+            ContentSelectionDialog(
+
+                onCameraSelected = {
+                    chooserDialog.value = false
+                    if (navController.context.checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        cameraImageLauncher.launch(createImageUri())
+                    } else {
+                        //request permission
+                        permissionLauncher.launch(android.Manifest.permission.CAMERA)
+                    }
+                },
+                onGallerySelected = {
+                    imageLauncher.launch("image/*")
+                    chooserDialog.value = false
+                })
+
+
 
         }
-
-
-
 
 
 
@@ -156,7 +161,7 @@ fun ChatScreen(
                 onSendMessage = { msge ->
                     viewModel.sendMessage(channelId, msge)
                 },
-                onImageClicked = { chooserDialog.value = true },
+                onImageClicked = { chooserDialog.value = true},
                 viewModel = viewModel,
                 channelId = channelId,
                 channelName = channelName
@@ -185,14 +190,7 @@ fun ChatMessages(
     }
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = Modifier.weight(1f)) {
-//            item {
-//                ChannelItem(
-//                    channelName = channelName,
-//                    modifier = Modifier,
-//                ) {
-//
-//                }
-//            }
+
             items(messages) { message ->
                 ChatBubble(message)
 
@@ -203,6 +201,7 @@ fun ChatMessages(
                 .fillMaxWidth()
                 .padding(8.dp), verticalAlignment = Alignment.CenterVertically
         ) {
+            //TODO()
             IconButton(onClick = {
                 msg.value = ""
                 onImageClicked()
@@ -272,8 +271,8 @@ fun ChatBubble(message: Message) {
             ) {
                 if (message.imageUrl != null) {
                     AsyncImage(
-                        model =message.imageUrl,
-                        contentDescription =null,
+                        model = message.imageUrl,
+                        contentDescription = null,
                         modifier = Modifier.size(200.dp),
                         contentScale = ContentScale.Crop
                     )
@@ -290,6 +289,7 @@ fun ChatBubble(message: Message) {
     }
 }
 
+
 @Composable
 fun ContentSelectionDialog(
     onCameraSelected: () -> Unit,
@@ -297,14 +297,15 @@ fun ContentSelectionDialog(
 ) {
     AlertDialog(
         onDismissRequest = { },
-        confirmButton = {
+        confirmButton ={
+            TextButton(onClick = onGallerySelected
+            ) {
+                Text(text = "Gallery")
+            }
+        } ,
+        dismissButton = {
             TextButton(onClick = onCameraSelected) {
                 Text(text = "Camera")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = { onGallerySelected }) {
-                Text(text = "Gallery")
             }
         },
         title = { Text(text = "Select Image") },
@@ -312,6 +313,9 @@ fun ContentSelectionDialog(
 
     )
 }
+
+
+
 
 //@Preview(showBackground = true)
 //@Composable

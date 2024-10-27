@@ -1,6 +1,8 @@
 [versions]
 agp = "8.5.0"
 firebaseBom = "33.4.0"
+firebaseMessagingDirectboot = "20.2.0"
+googleAuthLibraryOauth2Http = "1.19.0"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -16,16 +18,25 @@ hilt-compose = "1.2.0"
 coil = "2.6.0"
 material3Android = "1.2.1"
 runtimeLivedata = "1.7.3"
+volley = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-credentials = { module = "androidx.credentials:credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth" }
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
+auth-google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-database = { module = "com.google.firebase:firebase-database" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+firebase-messaging-directboot = { module = "com.google.firebase:firebase-messaging-directboot", version.ref = "firebaseMessagingDirectboot" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
+google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -46,6 +57,7 @@ dagger-hilt-compose  = {module = "androidx.hilt:hilt-navigation-compose", versio
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 coil = {module = "io.coil-kt:coil-compose" , version.ref = "coil"}
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 
 [plugins]

@@ -11,8 +11,9 @@ android {
     compileSdk = 34
     defaultConfig {
         applicationId = "com.example.chatter"
-        minSdk = 31
+        minSdk = 29
         targetSdk = 34
+
         versionCode = 1
         versionName = "1.0"
 
@@ -47,6 +48,12 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes +="META-INF/LICENSE"
+            excludes +="META-INF/LICENSE.txt"
+            excludes +="META-INF/NOTICE"
+            excludes +="META-INF/NOTICE.txt"
+            excludes +="mozilla/public-suffix-list.txt"
         }
     }
 }
@@ -61,6 +68,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.volley)
     //implementation(libs.support.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -80,9 +88,21 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation(libs.google.auth.library.oauth2.http)
 
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.runtime.livedata)
+
+    implementation (libs.auth.google.auth.library.oauth2.http)
+
+    implementation(libs.firebase.messaging)
+    implementation(libs.google.firebase.analytics)
+    implementation(libs.firebase.messaging.directboot)
+
+    // implement zegocould
+
+
+
 }
 kapt {
     correctErrorTypes = true

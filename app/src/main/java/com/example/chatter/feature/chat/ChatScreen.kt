@@ -273,8 +273,9 @@ fun ChatBubble(message: Message) {
                     AsyncImage(
                         model = message.imageUrl,
                         contentDescription = null,
-                        modifier = Modifier.size(200.dp),
-                        contentScale = ContentScale.Crop
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+
                     )
                 } else {
                     Text(
@@ -298,7 +299,7 @@ fun ContentSelectionDialog(
     AlertDialog(
         onDismissRequest = { },
         confirmButton ={
-            TextButton(onClick = onGallerySelected
+            TextButton(onClick =  onGallerySelected
             ) {
                 Text(text = "Gallery")
             }
